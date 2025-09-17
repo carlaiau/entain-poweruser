@@ -14,6 +14,7 @@ so you can seamlessly track and analyze your betting performance.
 - Responses are transformed into a CSV that matches the Betting Tracker template
 - Selectable provider: TAB (NZ) or Betcha (NZ)
 - Date-range selection for fetching statement activity
+- Regardless of date range, the query is capped at a maximum count of 2000
 
 
 ## Finding your Bearer Token
