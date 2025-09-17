@@ -2,9 +2,7 @@
 
 Fetch your betting statements from the sportsbook’s private API and export them to CSV.
 
-The exported CSV is formatted for direct import into the  
-[aussportsbetting.com Betting Tracker](https://www.aussportsbetting.com/tools/betting-tracker-excel-worksheet/),  
-so you can seamlessly track and analyze your betting performance.
+The exported CSV is formatted for direct import into the [aussportsbetting.com Betting Tracker](https://www.aussportsbetting.com/tools/betting-tracker-excel-worksheet/), so you can seamlessly track and analyze your betting performance.
 
 
 ## How it works
