@@ -24,10 +24,20 @@ export default function Page() {
           </div>
           <nav className="hidden md:flex items-center gap-4 text-sm text-slate-500 dark:text-slate-300">
             <a
-              href="https://github.com/carlaiau/entain-statement-grabber"
+              href="https://github.com/carlaiau/entain-statement-fetcher"
               className="hover:text-slate-900 dark:hover:text-white"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Github Repo
+            </a>
+            <a
+              href="https://shitodds.com"
+              className="hover:text-slate-900 dark:hover:text-white"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Shit Odds Comparison
             </a>
           </nav>
         </div>
