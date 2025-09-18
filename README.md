@@ -1,9 +1,12 @@
-# Entain Statement Fetcher
+# Entain Power User
+
+Next.js app to fetch betting markets from Entain's private API for quicker viewing at a sports level.
+
+## Statement Fetcher
 
 Fetch your betting statements from the sportsbook’s private API and export them to CSV.
 
 The exported CSV is formatted for direct import into the [aussportsbetting.com Betting Tracker](https://www.aussportsbetting.com/tools/betting-tracker-excel-worksheet/), so you can seamlessly track and analyze your betting performance.
-
 
 ## How it works
 
@@ -14,14 +17,13 @@ The exported CSV is formatted for direct import into the [aussportsbetting.com B
 - Date-range selection for fetching statement activity
 - Regardless of date range, the query is capped at a maximum count of 2000
 
-
 ## Finding your Bearer Token
 
-1. Log in to TAB or Betcha in your browser  
-2. Open Developer Tools (F12 on Windows/Linux, ⌥⌘I on Mac)  
-3. Go to the Network tab and refresh the page  
-4. Find a request to “/client-details”  
-5. Under Headers, copy the value of “Authorization: Bearer …” (everything after “Bearer ”)  
+1. Log in to TAB or Betcha in your browser
+2. Open Developer Tools (F12 on Windows/Linux, ⌥⌘I on Mac)
+3. Go to the Network tab and refresh the page
+4. Find a request to “/client-details”
+5. Under Headers, copy the value of “Authorization: Bearer …” (everything after “Bearer ”)
 6. Paste the token into the app’s Bearer Token field
 
 **Tip:** Tokens may expire periodically; if requests stop working, grab a fresh token.

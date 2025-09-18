@@ -1,3 +1,12 @@
+import { Subheading } from "@/catalyst/heading";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/catalyst/table";
 import {
   AccountTransactions,
   DateTimeSeconds,
@@ -58,12 +67,12 @@ const CsvViewer = ({
   const blob = new Blob([csv], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   return (
-    <div className="mt-6">
+    <div>
       <div className="my-4 flex items-center justify-between">
-        <h2 className="text-sm font-semibold my-6">CSV Preview</h2>
-        <span className="text-base text-gray-600">
+        <Subheading>CSV Preview</Subheading>
+        <p className="text-base text-gray-600">
           {rows.length} bet{rows.length !== 1 ? "s" : ""}
-        </span>
+        </p>
         <a
           href={url}
           download={`${start_date}-${end_date}_${service}-statement.csv`}
@@ -72,36 +81,27 @@ const CsvViewer = ({
           Download CSV
         </a>
       </div>
-      <div className="h-92 overflow-y-auto border">
-        <table className="">
-          <thead>
-            <tr>
+      <div className="h-92 overflow-y-auto">
+        <Table grid dense striped>
+          <TableHead>
+            <TableRow>
               {header.map((col) => (
-                <th key={col} className="text-sm border px-2 py-1 text-left">
-                  {col}
-                </th>
+                <TableHeader key={col}>{col}</TableHeader>
               ))}
-            </tr>
-          </thead>
-          <tbody>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {rows.map((row, idx) => (
-              <tr
-                key={idx}
-                className={
-                  "text-xs " + (idx % 2 === 0 ? "bg-white" : "bg-gray-50")
-                }
-              >
+              <TableRow key={idx}>
                 {row.map((cell, cidx) => (
-                  <td key={cidx} className="border px-2 py-1">
-                    {cell}
-                  </td>
+                  <TableCell key={cidx}>{cell}</TableCell>
                 ))}
-              </tr>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
-      <h2 className="text-sm font-semibold mt-12">Raw Response</h2>
+      <Subheading>Raw Response</Subheading>
       <pre className="mt-2 rounded bg-gray-100 p-3 text-sm overflow-x-auto max-h-64">
         {JSON.stringify(data, null, 2)}
       </pre>

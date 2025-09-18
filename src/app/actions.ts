@@ -14,7 +14,7 @@ const bookieFromId = {
   },
 };
 
-export async function doServerFetch(
+export async function doServerFetchForStatementHistory(
   prevState: FetchResult | null,
   formData: FormData
 ): Promise<FetchResult> {
