@@ -1,13 +1,19 @@
 "use client";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { getEventCard } from "@/app/actions/get-event-card";
 import { Table, TableBody, TableCell, TableRow } from "@/catalyst/table";
 import type { EventCardResponse } from "@/types";
 
-type Props = { id: string };
+const winNames = [
+  "Match Betting",
+  "Match Result",
+  "Fight Betting",
+  "Match Winner",
+];
 
-export default function EventCard({ id }: Props) {
+type Props = { id: string; onlyBasic?: boolean };
+
+export default function EventCard({ id, onlyBasic }: Props) {
   const [data, setData] = useState<EventCardResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,43 +24,34 @@ export default function EventCard({ id }: Props) {
   }, [id]);
 
   useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      setError(null);
-      setData(null);
-      if (!eventRightId) return;
+    if (!eventRightId) return;
+    const ac = new AbortController();
+    setError(null);
+    setData(null);
 
+    (async () => {
       try {
-        const json = await getEventCard(eventRightId);
-        if (!cancelled) setData(json);
+        const res = await fetch(`/api/event-card/${eventRightId}`, {
+          signal: ac.signal,
+        });
+        if (!res.ok) throw new Error(`API failed: ${res.status}`);
+        const json: EventCardResponse = await res.json();
+        setData(json);
       } catch (e: unknown) {
-        if (!cancelled)
-          setError(e instanceof Error ? e.message : "Failed to load");
+        if (ac.signal.aborted) return;
+        setError(e instanceof Error ? e.message : "Failed to load");
       }
-    }
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [eventRightId]);
+    })();
 
-  const basicNames = useMemo(
-    () =>
-      new Set([
-        "Match Betting",
-        "Match Result",
-        "Fight Betting",
-        "Match Winner",
-      ]),
-    []
-  );
+    return () => ac.abort();
+  }, [eventRightId]);
 
   const markets = useMemo(() => {
     if (!data) return [];
     return Object.entries(data.markets)
       .filter(
         ([, m]) =>
-          (m.entrant_ids.length <= 2 && basicNames.has(m.name)) ||
+          (m.entrant_ids.length <= 2 && winNames.includes(m.name)) ||
           m.handicap !== undefined
       )
       .sort((a, b) => {
@@ -64,7 +61,7 @@ export default function EventCard({ id }: Props) {
         const bh = b[1].handicap ?? 0;
         return bh - ah; // desc by handicap when names tie
       });
-  }, [data, basicNames]);
+  }, [data]);
 
   if (!eventRightId) return null;
 

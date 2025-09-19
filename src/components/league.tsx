@@ -1,18 +1,28 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { format } from "date-fns";
-import { Divider } from "@/catalyst/divider";
 import EventCard from "../components/event-card";
 import { Heading, Subheading } from "@/catalyst/heading";
 import { Button } from "@/catalyst/button";
 import { SportLeague } from "@/types";
 
+import { Swiper, type SwiperRef, SwiperSlide } from "swiper/react";
+import { Scrollbar, A11y } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import { main } from "motion/react-client";
 export default function LeaguesSingleView({
   leagues,
+  onlyBasic = false,
 }: {
+  onlyBasic?: boolean;
   leagues: SportLeague[];
 }) {
+  const mainSwiperRef = useRef<SwiperRef | null>(null);
+
   // Sort once for stable nav order
   const sortedLeagues = useMemo(
     () => [...leagues].sort((a, b) => a.name.localeCompare(b.name)),
@@ -50,65 +60,83 @@ export default function LeaguesSingleView({
 
   return (
     <div>
-      <div className="my-5 flex gap-2 flex-wrap">
+      <div className="mt-5 flex gap-2 flex-wrap">
         {sortedLeagues.map((league) => {
           const isActive = league.id === activeId;
           return (
-            <button
+            <Button
               key={league.id}
               onClick={() => handleSelect(league.id)}
-              className={
-                "no-underline border rounded-lg py-1 px-2 transition " +
-                (isActive
-                  ? "bg-black text-white border-black"
-                  : "bg-white hover:bg-slate-50")
-              }
+              color={isActive ? "blue" : "light"}
               aria-pressed={isActive}
             >
-              {league.name}
-            </button>
+              <p className="text-xs">{league.name}</p>
+            </Button>
           );
         })}
       </div>
 
-      {/* Only the active league is rendered */}
       {activeLeague && (
-        <div key={activeLeague.id} className="my-12">
-          <div className="flex items-start justify-between my-5">
+        <div key={activeLeague.id}>
+          <div className="flex items-start justify-between mt-5 ml-2">
             <a href={`#${activeLeague.id}`} aria-current="page">
-              <Heading className="text-lg font-bold">
+              <Subheading className="text-lg font-bold">
                 {activeLeague.name}
-              </Heading>
+              </Subheading>
             </a>
           </div>
+          <div className="flex flex-wrap gap-2 my-4">
+            {activeLeague.events.nodes.map((event, idx) => (
+              <Button
+                key={event.id}
+                onClick={() => mainSwiperRef.current?.swiper.slideTo(idx)}
+                outline
+              >
+                <p className="text-xs">{event.name}</p>
+              </Button>
+            ))}
+          </div>
 
-          {activeLeague.events.nodes.map((event) => (
-            <div key={event.id} className="my-8">
-              <div className="flex items-center justify-between mb-2 mx-0.5">
-                <div className="flex flex-col">
-                  <p className="text-base font-bold">{event.name}</p>
-                  <p className="text-sm">
-                    {format(
-                      new Date(event.advertisedStart),
-                      "EEE dd MMM HH:mm"
-                    )}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <Button
-                    to={"https://tab.co.nz" + event.url}
-                    color="teal"
-                    target="_blank"
-                  >
-                    <p className="text-xs">TAB</p>
-                  </Button>
-                </div>
-              </div>
+          <Swiper
+            ref={mainSwiperRef}
+            spaceBetween={10}
+            slidesPerView={1}
+            modules={[Scrollbar, A11y]}
+            scrollbar={{ draggable: true }}
+          >
+            {activeLeague.events.nodes.map((event) => (
+              <SwiperSlide key={event.id}>
+                <div className="bg-zinc-100 p-2 rounded pb-4">
+                  <div className="flex items-center justify-between mb-2 mx-0.5">
+                    <div className="flex flex-col">
+                      <p className="text-base font-bold">{event.name}</p>
+                      <p className="text-sm">
+                        {format(
+                          new Date(event.advertisedStart),
+                          "EEE dd MMM HH:mm"
+                        )}
+                      </p>
+                    </div>
+                    <div className="flex flex-col">
+                      <Button
+                        to={"https://tab.co.nz" + event.url}
+                        color="teal"
+                        target="_blank"
+                      >
+                        <p className="text-xs">TAB</p>
+                      </Button>
+                    </div>
+                  </div>
 
-              <EventCard id={event.id} />
-            </div>
-          ))}
-          <Divider />
+                  <EventCard
+                    id={event.id}
+                    key={event.id}
+                    onlyBasic={onlyBasic}
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       )}
     </div>
