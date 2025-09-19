@@ -1,13 +1,7 @@
 import _ from "lodash";
 import { SportCategoryResponse } from "@/types";
-import EventCard from "../../event-card";
-import Link from "next/link";
 import { Button } from "@/catalyst/button";
-import { Heading, Subheading } from "@/catalyst/heading";
-import { format } from "date-fns";
-import { Divider } from "@/catalyst/divider";
-import { Fragment } from "react";
-import { Badge, BadgeButton } from "@/catalyst/badge";
+import LeaguesSingleView from "@/components/league";
 type Props = {
   params: { slug: string };
 };
@@ -73,64 +67,7 @@ export default async function Page({ params }: Props) {
   return (
     <div className=" w-full min-h-screen ">
       <Button to="/">Back</Button>
-      <div className="my-5 flex gap-2 flex-wrap">
-        {leagues
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map((league) => (
-            <a
-              key={league.name}
-              href={"#" + league.id}
-              className="no-underline border rounded-lg py-1 px-2"
-            >
-              {league.name}
-            </a>
-          ))}
-      </div>
-      {leagues.map((league) => (
-        <div key={league.id}>
-          <div key={league.name} className="my-12">
-            <div className="flex items-start justify-between my-5">
-              <a href="#" id={league.id}>
-                <Heading className="text-lg font-bold">{league.name}</Heading>
-              </a>
-              <Subheading>
-                Odds updated at {format(new Date(), "HH:mm")}
-              </Subheading>
-            </div>
-            {league.events.nodes.map((event) => {
-              return (
-                <div key={event.id}>
-                  <div key={event.id} className="my-8">
-                    <div className="flex items-center justify-between mb-2 mx-0.5">
-                      <div className="flex flex-col">
-                        <p className="text-base font-bold">{event.name}</p>
-                        <p className="text-sm">
-                          {format(
-                            new Date(event.advertisedStart),
-                            "EEE dd MMM HH:mm"
-                          )}
-                        </p>
-                      </div>
-                      <div className="flex flex-col">
-                        <Button
-                          to={"https://tab.co.nz" + event.url}
-                          color="teal"
-                          target="_blank"
-                        >
-                          <p className="text-xs">Go to TAB market</p>
-                        </Button>
-                      </div>
-                    </div>
-
-                    <EventCard id={event.id} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <Divider />
-        </div>
-      ))}
+      <LeaguesSingleView leagues={leagues} />
     </div>
   );
 }

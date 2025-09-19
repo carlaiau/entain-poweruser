@@ -1,10 +1,10 @@
 // app/tab-tester/page.tsx
 "use client";
 import { useState } from "react";
-import { Form } from "../form";
-import { doServerFetchForStatementHistory } from "../actions";
+import { Form } from "@/components/statementForm";
 import { supportedService } from "@/types";
 import { Button } from "@/catalyst/button";
+import { doServerFetchForStatementHistory } from "../actions/fetch-statement-history";
 
 export default function Page() {
   const [service, setService] = useState<supportedService | "">("");
