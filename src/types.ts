@@ -68,11 +68,20 @@ export interface SportCategoryResponse {
   data: SportData;
 }
 
+export interface SportLeague {
+  events: {
+    nodes: SportingEvent[];
+  };
+  name: string;
+  url: string;
+  id: string;
+}
+
 export interface SportData {
   category: SportCategory;
   upcomingEvents: {
-    events: {
-      nodes: SportingEvent[];
+    leagues: {
+      nodes: SportLeague[];
     };
   };
 }
