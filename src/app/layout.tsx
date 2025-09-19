@@ -7,12 +7,19 @@ import {
   Sidebar,
   SidebarBody,
   SidebarHeader,
+  SidebarHeading,
   SidebarItem,
   SidebarLabel,
   SidebarSection,
 } from "@/catalyst/sidebar";
 import { SidebarLayout } from "@/catalyst/sidebar-layout";
-import { Navbar, NavbarSection, NavbarSpacer } from "@/catalyst/navbar";
+import {
+  Navbar,
+  NavbarDivider,
+  NavbarItem,
+  NavbarSection,
+  NavbarSpacer,
+} from "@/catalyst/navbar";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -74,23 +81,53 @@ export default async function RootLayout({
   };
 
   const json: MarketResponse = await res.json();
-  console.log({ json });
+
+  const repo = "https://github.com/carlaiau/entain-power-user";
+  const shit = "https://shitodds.com";
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SidebarLayout
-          navbar={<Navbar></Navbar>}
+          navbar={
+            <Navbar>
+              <NavbarSection>
+                <NavbarItem href="/statement" to="/statement">
+                  Statement Fetcher
+                </NavbarItem>
+              </NavbarSection>
+              <NavbarDivider />
+              <NavbarSection>
+                <NavbarItem to={shit} href={shit}>
+                  Shit Odds
+                </NavbarItem>
+                <NavbarItem to={repo} href={repo}>
+                  Github
+                </NavbarItem>
+              </NavbarSection>
+            </Navbar>
+          }
           sidebar={
             <Sidebar>
               <SidebarHeader className="text-lg font-semibold tracking-tight">
-                <Link to="/" className="no-underline">
-                  Entain
-                </Link>
+                <SidebarSection className="max-lg:hidden">
+                  <SidebarHeading>Entain</SidebarHeading>
+                  <SidebarItem href="/statement" to="/statement">
+                    Statement Fetcher
+                  </SidebarItem>
+                  <SidebarItem to={shit} href={shit}>
+                    Shit Odds
+                  </SidebarItem>
+
+                  <SidebarItem href={repo} to={repo}>
+                    Github repo
+                  </SidebarItem>
+                </SidebarSection>
               </SidebarHeader>
               <SidebarBody>
                 <SidebarSection>
+                  <SidebarHeading>Sports</SidebarHeading>
                   {json.data.categories.map((c) => (
                     <SidebarItem to={c.url} href={c.url} key={c.id}>
                       <p className="text-xs">{c.name}</p>
