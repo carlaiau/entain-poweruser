@@ -4,7 +4,8 @@ import EventCard from "../../event-card";
 import Link from "next/link";
 import { Button } from "@/catalyst/button";
 import { Heading, Subheading } from "@/catalyst/heading";
-
+import { format } from "date-fns";
+import { Divider } from "@/catalyst/divider";
 type Props = {
   params: { slug: string };
 };
@@ -38,28 +39,54 @@ export default async function Page({ params }: Props) {
 
   const uniqueCompetitionNames = _.uniq(events.map((e) => e.competition.name));
 
+  new Date();
   return (
     <div className=" w-full min-h-screen ">
       <Button to="/">Back</Button>
       {uniqueCompetitionNames.map((name) => (
-        <div key={name} className="mb-12">
-          <Heading className="text-lg font-bold my-5">{name}</Heading>
-          {events
-            .filter((event) => event.competition.name === name)
-            .map((event) => (
-              <div key={event.id} className="mb-4">
-                <div className="flex items-center justify-between">
-                  <Subheading className="text-base font-bold">
-                    {event.name}
-                  </Subheading>
-                  <Subheading>
-                    {new Date(event.advertisedStart).toLocaleString()}
-                  </Subheading>
-                </div>
-                <EventCard id={event.id} />
-              </div>
-            ))}
-        </div>
+        <>
+          <div key={name} className="my-12">
+            <div className="flex items-start justify-between my-5">
+              <Heading className="text-lg font-bold">{name}</Heading>
+              <Subheading>
+                Odds updated at {format(new Date(), "HH:mm")}
+              </Subheading>
+            </div>
+            {events
+              .filter((event) => event.competition.name === name)
+              .map((event) => {
+                return (
+                  <>
+                    <div key={event.id} className="my-8">
+                      <div className="flex items-center justify-between mb-2 mx-0.5">
+                        <div className="flex flex-col">
+                          <p className="text-base font-bold">{event.name}</p>
+                          <p className="text-sm">
+                            {format(
+                              new Date(event.advertisedStart),
+                              "EEE dd MMM HH:mm"
+                            )}
+                          </p>
+                        </div>
+                        <div className="flex flex-col">
+                          <Button
+                            to={"https://tab.co.nz" + event.url}
+                            color="teal"
+                            target="_blank"
+                          >
+                            <p className="text-xs">Go to TAB market</p>
+                          </Button>
+                        </div>
+                      </div>
+
+                      <EventCard id={event.id} />
+                    </div>
+                  </>
+                );
+              })}
+          </div>
+          <Divider />
+        </>
       ))}
     </div>
   );
