@@ -23,8 +23,13 @@ export default function Page() {
             </h1>
 
             <p className="mt-3 text-slate-600 dark:text-slate-300">
-              Fetch your betting statements from the sportsbook’s private API
+              Fetch your betting statements from the sportsbook's private API
               and export them to CSV.
+            </p>
+
+            <p className="mt-3 text-red-400 dark:text-slate-300">
+              Warning this tool records the closing handicap of your bets. Not
+              what they were at the time of placing.
             </p>
 
             <p className="mt-3 text-slate-600 dark:text-slate-300">
@@ -49,7 +54,7 @@ export default function Page() {
             </p>
           </div>
 
-          <p className="mt-4 text-xs text-red-600 dark:text-red-400">
+          <p className="mt-4 text-sm text-red-600 dark:text-red-400 mx-4">
             <strong>Disclaimer:</strong> Provided as-is. We take no
             responsibility for the security of your bearer token or retrieved
             data. Use at your own risk.
