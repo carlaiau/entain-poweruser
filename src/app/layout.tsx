@@ -101,6 +101,9 @@ export default async function RootLayout({
               <SidebarHeader className="text-lg font-semibold tracking-tight">
                 <SidebarSection className="max-lg:hidden">
                   <SidebarHeading>Entain</SidebarHeading>
+                  <SidebarItem href="/transaction" to="/transaction">
+                    Transaction Fetcher
+                  </SidebarItem>
                   <SidebarItem href="/statement" to="/statement">
                     Statement Fetcher
                   </SidebarItem>

@@ -21,6 +21,7 @@ export async function doServerFetchForStatementHistory(
     if (!formData) {
       return { ok: false, status: 400, error: "No form data" };
     }
+
     const token = (formData.get("token") || "").toString().trim();
     if (typeof formData.get("service") === null) {
       return { ok: false, status: 400, error: "Missing service" };
@@ -36,7 +37,6 @@ export async function doServerFetchForStatementHistory(
     const start_date = (formData.get("start_date") || "").toString().trim();
     const end_date = (formData.get("end_date") || "").toString().trim();
 
-    console.log({ start_date, end_date });
     if (!start_date || !end_date) {
       return { ok: false, status: 400, error: "Missing date range" };
     }

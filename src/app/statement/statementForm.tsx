@@ -8,7 +8,7 @@ import {
 } from "@/types";
 import React, { useState } from "react";
 import { useActionState } from "react";
-import CsvViewer from "./csv-viewer";
+import CsvViewer from "./csvViewer";
 
 export function Form({
   action,

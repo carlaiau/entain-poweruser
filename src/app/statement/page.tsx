@@ -1,7 +1,7 @@
 // app/tab-tester/page.tsx
 "use client";
 import { useState } from "react";
-import { Form } from "@/components/statementForm";
+import { Form } from "@/app/statement/statementForm";
 import { supportedService } from "@/types";
 import { Button } from "@/catalyst/button";
 import { doServerFetchForStatementHistory } from "../actions/fetch-statement-history";
@@ -17,39 +17,42 @@ export default function Page() {
       <div className="grid grid-cols-1 gap-y-6 mt-6">
         {/* Left: Info panel */}
         <section className="lg:col-span-1">
-          <div className="rounded-md border border-slate-200 bg-white p-6">
-            <h1 className="text-xl font-semibold">
-              TAB / Betcha Statement Fetcher
-            </h1>
+          <h1 className="text-xl font-semibold">
+            TAB / Betcha Statement Fetcher.{" "}
+            <span className="text-red-600">Deprecated</span>
+          </h1>
 
-            <p className="mt-3 text-slate-600 dark:text-slate-300">
-              Fetch your betting statements from the sportsbook’s private API
-              and export them to CSV.
-            </p>
+          <p className="mt-3 text-slate-600 dark:text-slate-300">
+            Fetch your betting statements from the sportsbook's private API and
+            export them to CSV.{" "}
+            <span className="text-red-600">
+              Warning this tool records the closing handicap of your bets. Not
+              what they were at the time of placing.
+            </span>
+          </p>
 
-            <p className="mt-3 text-slate-600 dark:text-slate-300">
-              The CSV is formatted for direct import into{" "}
-              <a
-                className="underline text-emerald-600 font-medium hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
-                href="https://www.aussportsbetting.com/tools/betting-tracker-excel-worksheet/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                aussportsbetting.com Betting Tracker
-              </a>
-              .
-            </p>
+          <p className="mt-3 text-slate-600 dark:text-slate-300">
+            The CSV is formatted for direct import into{" "}
+            <a
+              className="underline text-emerald-600 font-medium hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+              href="https://www.aussportsbetting.com/tools/betting-tracker-excel-worksheet/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              aussportsbetting.com Betting Tracker
+            </a>
+            .
+          </p>
 
-            <p>
-              <strong className="font-medium text-slate-900 dark:text-white">
-                How it works:
-              </strong>{" "}
-              Next.js server actions make the request to your sportsbook (no
-              CORS), then we transform the response into CSV.
-            </p>
-          </div>
+          <p>
+            <strong className="font-medium text-slate-900 dark:text-white">
+              How it works:
+            </strong>{" "}
+            Next.js server actions make the request to your sportsbook (no
+            CORS), then we transform the response into CSV.
+          </p>
 
-          <p className="mt-4 text-xs text-red-600 dark:text-red-400">
+          <p className="mt-4 text-sm text-red-600 dark:text-red-400">
             <strong>Disclaimer:</strong> Provided as-is. We take no
             responsibility for the security of your bearer token or retrieved
             data. Use at your own risk.
