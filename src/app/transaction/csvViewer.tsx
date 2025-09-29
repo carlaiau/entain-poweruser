@@ -163,11 +163,14 @@ function toRow(obj: BetLegJoin) {
   }
 
   let closeLine = "";
+  /*
+  // We look at historical sharps anyway
   if (selection.closeHandicap) {
     closeLine = (
       (selection.entrant?.name == "Over" ? -1 : 1) * selection.closeHandicap
     ).toString();
   }
+    */
 
   const { betType = "", sport = "", tipper = "" } = mapHelper(selection) || "";
   return [
