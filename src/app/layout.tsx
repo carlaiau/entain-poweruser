@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-import { Link } from "@/catalyst/link";
 import {
   Sidebar,
   SidebarBody,
   SidebarHeader,
   SidebarHeading,
   SidebarItem,
-  SidebarLabel,
   SidebarSection,
 } from "@/catalyst/sidebar";
 import { SidebarLayout } from "@/catalyst/sidebar-layout";
@@ -17,7 +15,6 @@ import {
   NavbarDivider,
   NavbarItem,
   NavbarSection,
-  NavbarSpacer,
 } from "@/catalyst/navbar";
 
 export const metadata: Metadata = {

@@ -23,7 +23,7 @@ export default function Page() {
           </h1>
 
           <p className="mt-3 text-slate-600 dark:text-slate-300">
-            Fetch your betting statements from the sportsbook's private API and
+            Fetch your betting statements from the sportsbooks private API and
             export them to CSV.{" "}
             <span className="text-red-600">
               Warning this tool records the closing handicap of your bets. Not

@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { SportCategoryResponse } from "@/types";
 import { Button } from "@/catalyst/button";
 import LeaguesSingleView from "@/components/league";

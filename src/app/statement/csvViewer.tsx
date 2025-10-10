@@ -41,6 +41,7 @@ const CsvViewer = ({
     return sa - sb; // ascending
   });
 
+  console.log({ bets });
   const rows = bets.map(toRow);
 
   const header = [
@@ -147,8 +148,13 @@ function toRow(obj: AccountTransactions) {
   const date = formatNZT(obj?.transaction?.created);
   const stake = obj?.transaction?.requestAmount ?? "";
   const eventName = obj?.betTransactions?.eventName ?? "";
-  const selection = obj?.betTransactions?.entrantName ?? "";
-  const betType = obj?.betTransactions?.productName ?? "";
+  const selection =
+    (obj?.betTransactions?.entrantName ?? "") +
+    ", " +
+    (obj?.betTransactions?.productName ?? "");
+  const betType =
+    extractNflBetType(obj?.betTransactions?.productName ?? "").category || "";
+  const tipper = extractTipperFromBetType(betType) || "";
   const betOdds = (obj?.betTransactions?.betOdds ?? "").replace(/[^0-9.]/g, "");
   const win = toWinFlag(obj?.betTransactions?.betStatus);
 
@@ -156,9 +162,9 @@ function toRow(obj: AccountTransactions) {
     date, // Date
     "", // Bookmaker
     "", // Sport / League
-    selection + ", " + betType, // Selection
-    "", // Bet Type
-    "", // Tipper
+    selection, // Selection
+    betType, // Bet Type
+    tipper, // Tipper
     "", // My Variable
     eventName, // Fixture / Event
     "", // Live Bet
@@ -169,5 +175,40 @@ function toRow(obj: AccountTransactions) {
     win, // Win (Y/P/N)
   ];
 }
+
+const extractNflBetType = (raw: string) => {
+  const normalized = raw.toLowerCase();
+
+  const isAlt = normalized.includes("to have");
+  const isRushing = normalized.includes("rushing yards");
+  const isReceiving =
+    normalized.includes("receiving yards") ||
+    normalized.includes("recieving yards");
+  const isPassing = normalized.includes("passing yards");
+
+  let category = "";
+  if (isAlt && isRushing) category = "Alt Rushing";
+  else if (isAlt && isReceiving) category = "Alt Receiving";
+  else if (isAlt && isPassing) category = "Alt Passing";
+  else if (isRushing) category = "Rushing Yards";
+  else if (isReceiving) category = "Receiving Yards";
+  else if (isPassing) category = "Passing Yards";
+
+  // Extract player and team if in parentheses
+  const playerMatch = raw.match(/^(.+?)\s*\(([^)]+)\)/);
+  const player = playerMatch?.[1]?.trim();
+  const team = playerMatch?.[2]?.trim();
+
+  return { category, player, team };
+};
+
+const extractTipperFromBetType = (betType: string) => {
+  if (!betType) return "";
+  const lower = betType.toLowerCase();
+  if (lower.includes("alt")) {
+    return "Alt Props";
+  }
+  return "Props";
+};
 
 export default CsvViewer;

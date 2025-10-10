@@ -1,5 +1,4 @@
-import { Button } from "@/catalyst/button";
-import { Heading, Subheading } from "@/catalyst/heading";
+import { Heading } from "@/catalyst/heading";
 
 const HomePage = () => {
   return (

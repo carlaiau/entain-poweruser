@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { buildResultIndexLoose, joinBetLegs } from "./utils";
+import { joinBetLegs } from "./utils";
 import CsvViewer from "./csvViewer";
 import { FetchResult, supportedService } from "@/types";
 import { Heading } from "@/catalyst/heading";
@@ -61,7 +61,7 @@ const TransactionForm = ({
         Fetch NFL ATS and Player Props Transaction History
       </Heading>
       <p className="mt-3 text-slate-600 dark:text-slate-300">
-        Fetch your betting transactions from the sportsbook's private API and
+        Fetch your betting transactions from the sportsbooks private API and
         export them to CSV.
       </p>
 

@@ -18,7 +18,7 @@ const bookieFromId = {
 export async function doServerFetchForTransactionHistory(
   prevState: FetchResult | null,
   formData: FormData
-): Promise<any> {
+): Promise<FetchResult> {
   if (!formData) {
     return { ok: false, status: 400, error: "No form data" };
   }
