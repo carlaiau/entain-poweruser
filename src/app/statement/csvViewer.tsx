@@ -42,7 +42,7 @@ const CsvViewer = ({
   });
 
   console.log({ bets });
-  const rows = bets.map(toRow);
+  const rows = bets.map((b) => toRow(b, service));
 
   const header = [
     "Date",
@@ -144,7 +144,7 @@ function toWinFlag(status: string) {
   return "P"; // pending / open / placed / void / unknown
 }
 
-function toRow(obj: AccountTransactions) {
+function toRow(obj: AccountTransactions, service: supportedService | "" = "") {
   const date = formatNZT(obj?.transaction?.created);
   const stake = obj?.transaction?.requestAmount ?? "";
   const eventName = obj?.betTransactions?.eventName ?? "";
@@ -153,15 +153,16 @@ function toRow(obj: AccountTransactions) {
     ", " +
     (obj?.betTransactions?.productName ?? "");
   const betType =
-    extractNflBetType(obj?.betTransactions?.productName ?? "").category || "";
+    extractBetType(obj?.betTransactions?.productName ?? "").category || "";
   const tipper = extractTipperFromBetType(betType) || "";
+  const sport = extractSportFromBetType(betType);
   const betOdds = (obj?.betTransactions?.betOdds ?? "").replace(/[^0-9.]/g, "");
   const win = toWinFlag(obj?.betTransactions?.betStatus);
 
   return [
     date, // Date
-    "", // Bookmaker
-    "", // Sport / League
+    service, // Bookmaker
+    sport, // Sport / League
     selection, // Selection
     betType, // Bet Type
     tipper, // Tipper
@@ -176,23 +177,36 @@ function toRow(obj: AccountTransactions) {
   ];
 }
 
-const extractNflBetType = (raw: string) => {
+const extractBetType = (raw: string) => {
   const normalized = raw.toLowerCase();
 
-  const isAlt = normalized.includes("to have");
+  const isAlt =
+    normalized.includes("to have") || normalized.includes("to score");
   const isRushing = normalized.includes("rushing yards");
   const isReceiving =
     normalized.includes("receiving yards") ||
     normalized.includes("recieving yards");
   const isPassing = normalized.includes("passing yards");
+  const isPoints = normalized.includes("points");
+  const isRebounds = normalized.includes("rebounds");
+  const isAssists = normalized.includes("assists");
 
   let category = "";
-  if (isAlt && isRushing) category = "Alt Rushing";
-  else if (isAlt && isReceiving) category = "Alt Receiving";
-  else if (isAlt && isPassing) category = "Alt Passing";
-  else if (isRushing) category = "Rushing Yards";
-  else if (isReceiving) category = "Receiving Yards";
-  else if (isPassing) category = "Passing Yards";
+  if (isAlt) {
+    if (isRushing) category = "Alt Rushing";
+    else if (isReceiving) category = "Alt Receiving";
+    else if (isPassing) category = "Alt Passing";
+    else if (isPoints) category = "Alt Points";
+    else if (isRebounds) category = "Alt Rebounds";
+    else if (isAssists) category = "Alt Assists";
+  } else {
+    if (isRushing) category = "Rushing Yards";
+    else if (isReceiving) category = "Receiving Yards";
+    else if (isPassing) category = "Passing Yards";
+    else if (isPoints) category = "Points";
+    else if (isRebounds) category = "Rebounds";
+    else if (isAssists) category = "Assists";
+  }
 
   // Extract player and team if in parentheses
   const playerMatch = raw.match(/^(.+?)\s*\(([^)]+)\)/);
@@ -202,6 +216,19 @@ const extractNflBetType = (raw: string) => {
   return { category, player, team };
 };
 
+const extractSportFromBetType = (betType: string) => {
+  if (!betType) return "";
+  const lower = betType.toLowerCase();
+  const nfl = ["rushing", "receiving", "passing"];
+  const nba = ["points", "rebounds", "assists"];
+  if (nfl.some((kw) => lower.includes(kw))) {
+    return "NFL";
+  }
+  if (nba.some((kw) => lower.includes(kw))) {
+    return "NBA";
+  }
+  return "";
+};
 const extractTipperFromBetType = (betType: string) => {
   if (!betType) return "";
   const lower = betType.toLowerCase();

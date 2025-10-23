@@ -34,5 +34,11 @@ export async function GET(
   }
 
   const json = await upstream.json();
-  return NextResponse.json(json, { status: 200 });
+  return NextResponse.json(json, {
+    status: 200,
+    headers: {
+      "Cache-Control": "no-store, no-cache, max-age=0, must-revalidate",
+      "CDN-Cache-Control": "no-store",
+    },
+  });
 }

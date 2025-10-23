@@ -19,7 +19,6 @@ export default function Page() {
         <section className="lg:col-span-1">
           <h1 className="text-xl font-semibold">
             TAB / Betcha Statement Fetcher.{" "}
-            <span className="text-red-600">Deprecated</span>
           </h1>
 
           <p className="mt-3 text-slate-600 dark:text-slate-300">
